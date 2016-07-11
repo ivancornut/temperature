@@ -9,12 +9,12 @@ int main()
 	FILE *fp ;
 // file to write current temperature for html page
 	FILE *fp2 ;
-	char str1[100], str2[100] ;
-	char str3[100]= "01.00";
-	printf("%s\n",str3);
+	char str1[100], str2[100], str3[100];
+//	char str3[100]= "01.00";
+//	printf("%s\n",str3);
 	printf("%f \n", strtod(str3,NULL));
 	int iterations = 2000;	
-	double *storage     = (double*) malloc(iterations * sizeof(double));
+	double *storage = (double*) malloc(iterations * sizeof(double));
 	memset(storage, 0, iterations * sizeof(double));
 	int i = 0;
 // number of iterations it will be running
@@ -29,7 +29,7 @@ int main()
 			perror("Error opening file");
      			return(-1);
    		}
-// if the file containing data is fulled 	
+// if the file containing data is filled 	
 		if( fgets(str1,60,fp) != NULL && fgets(str2,60,fp) != NULL)
 		{
 			printf("%s  %s \n",str1, str2);
