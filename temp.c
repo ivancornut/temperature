@@ -37,7 +37,7 @@ int main()
 			str3[1] = str2[30];
 			str3[2] = '.';
 			str3[3] = str2[31];
-			str3[4] = str2[32];
+//			str3[4] = str2[32];
 //			printf("%f \n", strtod(str3, NULL));			
 			printf("Current temperature is : %s °C \n", str3);
 			fprintf(fp2, "Current temperature is : %s \\°C \n", str3);
