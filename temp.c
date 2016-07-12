@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "gnuplot_i.h"
+#include <time.h>
 void create_csv(double *big_array, int iteration);
 int main()
 {
@@ -37,8 +38,8 @@ int main()
 			str3[1] = str2[30];
 			str3[2] = '.';
 			str3[3] = str2[31];
-//			str3[4] = str2[32];
-//			printf("%f \n", strtod(str3, NULL));			
+			str3[4] = str2[32];
+			printf("%f \n", strtod(str3, NULL));			
 			printf("Current temperature is : %s °C \n", str3);
 			fprintf(fp2, "Current temperature is : %s \\°C \n", str3);
 			storage[i] = strtod(str3, NULL);
@@ -54,15 +55,22 @@ int main()
 	return 0 ;
 }
 
-void create_csv(double *big_array, int iteration)
+void create_csv(double *big_array_1, double *big_array_2, int iteration, int timestamp)
 {
-	double adapt_array[iteration];	
-	char fileName[100] = "temp_test.csv"; 	
+	time_t curtime;
+	time(&curtime);	
+	double adapt_array_1[iteration];
+	double adapt_array_2[iteration];	
+	char fileName[100];
+	strcat(fileName,ctime(&curtime));
+	strcat(fileName,".csv");
+
 	int i = 0;
 	while ( i < iteration)
 		{
-			adapt_array[i] = big_array[i];
+			adapt_array_1[i] = big_array_1[i];
+			adapt_array_2[i] = big_array_2[i];
 			i++;
 		}
-		gnuplot_write_x_csv(fileName,adapt_array,iteration,"Temperature" );
+		gnuplot_write_xy_csv(fileName, adapt_array_1, adapt_array_2, iteration,"Temperature over time" );
 } 
