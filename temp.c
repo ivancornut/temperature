@@ -7,6 +7,8 @@
 // function to create csv readable by gnuplot using gnuplot_i library
 void create_csv(double *big_array_1, double *big_array_2, int iteration, char * fileName);
 
+void RemoveSpaces(char* source);
+
 int main(int argc, char *argv[])
 {
 // file to read temperature
@@ -22,7 +24,10 @@ int main(int argc, char *argv[])
 	time_t stamp_time;
 	time(&stamp_time);	
 	char fileName[100];
-	strcat(fileName,ctime(&stamp_time));
+	char *buffer; 
+	buffer = ctime(&stamp_time);
+	RemoveSpaces(buffer);
+	strcat(fileName,buffer);
 	strcat(fileName,".csv");
 
 	int iterations = atoi(argv[1]);
@@ -101,3 +106,16 @@ void create_csv(double *big_array_1, double *big_array_2, int iteration, char * 
 	
 	gnuplot_write_xy_csv(fileName, adapt_array_1, adapt_array_2, iteration,"Temperature over time" );
 } 
+
+void RemoveSpaces(char* source)
+{
+  char* i = source;
+  char* j = source;
+  while(*j != 0)
+  {
+    *i = *j++;
+    if(*i != ' ')
+      i++;
+  }
+  *i = 0;
+}
