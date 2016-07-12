@@ -15,7 +15,8 @@ int main(int argc, char *argv[])
 	FILE *read_file ;
 // file to write current temperature for html page
 	FILE *write_file ;
-	
+
+
 	double nb_of_seconds;
 	time_t begin_time;
 	time_t current_time;
@@ -94,7 +95,14 @@ void create_csv(double *big_array_1, double *big_array_2, int iteration, char * 
 
 	double adapt_array_1[iteration];
 	double adapt_array_2[iteration];
-
+	
+	gnuplot_ctrl * h1;
+	h1 = gnuplot_init();
+	gnuplot_cmd(h1, "set terminal gif size 800,600 ");
+	gnuplot_set_xlabel(h1,"t (in minutes)");
+	gnuplot_set_ylabel(h1, "temp (in °C)");
+	gnuplot_cmd(h1, "set output \'/home/pi/public_html/output_temp.gif\'");
+	
 	int i = 0;
 	
 	while ( i < iteration)
@@ -103,6 +111,9 @@ void create_csv(double *big_array_1, double *big_array_2, int iteration, char * 
 			adapt_array_2[i] = big_array_2[i];
 			i++;
 		}
+
+	gnuplot_plot_xy(h1, adapt_array_1, adapt_array_2, iteration, "Temperature over time");
+	gnuplot_close(h1);
 	
 	gnuplot_write_xy_csv(fileName, adapt_array_1, adapt_array_2, iteration,"Temperature over time" );
 } 
@@ -114,7 +125,7 @@ void RemoveSpaces(char* source)
   while(*j != 0)
   {
     *i = *j++;
-    if(*i != ' ' && *i != ':' && *i != '?')
+    if(*i != ' ' && *i != ':' && *i != '?' && *i != '\n')
       i++;
   }
   *i = 0;
