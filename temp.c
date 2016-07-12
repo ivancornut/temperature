@@ -114,7 +114,7 @@ void RemoveSpaces(char* source)
   while(*j != 0)
   {
     *i = *j++;
-    if(*i != ' ')
+    if(*i != ' ' && *i != ':' && *i != '?')
       i++;
   }
   *i = 0;
