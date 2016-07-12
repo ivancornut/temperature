@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "gnuplot_i.h"
 #include <time.h>
-void create_csv(double *big_array, int iteration);
+void create_csv(double *big_array_1, double *big_array_2, int iteration, char * fileName);
 int main(int argc, char *argv[])
 {
 // file to read temperature
-	FILE *fp ;
+	FILE *read_file ;
 // file to write current temperature for html page
-	FILE *fp2 ;
+	FILE *write_file ;
 	
 	time_t curtime;
 	time(&curtime);	
@@ -17,27 +18,34 @@ int main(int argc, char *argv[])
 	strcat(fileName,ctime(&curtime));
 	strcat(fileName,".csv");
 
-	
 	int iterations = atoi(argv[1]);
 	int sleep_time = atoi(argv[2]);
 	char str1[100], str2[100], str3[100];
-	double *storage = (double*) malloc(iterations * sizeof(double));
-	memset(storage, 0, iterations * sizeof(double));
+	
+	double *temperature_storage = (double*) malloc(iterations * sizeof(double));
+	memset(temperature_storage, 0, iterations * sizeof(double));
+
+	double *time_storage = (double*) malloc(iterations * sizeof(double));
+	memset(time_storage, 0, iterations * sizeof(double));
 	int i = 0;
+
 // number of iterations it will be running
-	while (i < 2000)
+	while (i < iterations)
 	{
+
 // opens the files "r" is for read and "w" is for write 
- 		fp=fopen("/sys/bus/w1/devices/28-000006744fe0/w1_slave", "r") ;
-		fp2=fopen("/home/pi/public_html/temp.txt", "w") ;
+ 		read_file=fopen("/sys/bus/w1/devices/28-000006744fe0/w1_slave", "r") ;
+		write_file=fopen("/home/pi/public_html/temp.txt", "w") ;
+
 // if the file containing data is empty
-		if(fp == NULL) 
+		if(read_file == NULL) 
 		{
 			perror("Error opening file");
      			return(-1);
    		}
+
 // if the file containing data is filled 	
-		if( fgets(str1,60,fp) != NULL && fgets(str2,60,fp) != NULL)
+		if( fgets(str1,60,read_file) != NULL && fgets(str2,60,read_file) != NULL)
 		{
 			printf("%s  %s \n",str1, str2);
 			str3[0] = str2[29];
@@ -47,36 +55,37 @@ int main(int argc, char *argv[])
 			str3[4] = str2[32];
 			printf("%f \n", strtod(str3, NULL));			
 			printf("Current temperature is : %s °C \n", str3);
-			fprintf(fp2, "Current temperature is : %s \\°C \n", str3);
-			storage[i] = strtod(str3, NULL);
-			create_csv(storage,i);
+			fprintf(write_file, "Current temperature is : %s \\°C \n", str3);
+			temperature_storage[i] = strtod(str3, NULL);
+			create_csv(time_storage, temperature_storage, i, fileName);
 		}
+
 // close the files 
-		fclose(fp) ;
-		fclose(fp2) ;
+		fclose(read_file) ;
+		fclose(write_file) ;
+
 // wait 300 seconds for next iteration 
 		sleep(sleep_time);		
 		i++;
 	}
+
 	return 0 ;
 }
 
 void create_csv(double *big_array_1, double *big_array_2, int iteration, char * fileName)
 {
-	time_t curtime;
-	time(&curtime);	
+
 	double adapt_array_1[iteration];
-	double adapt_array_2[iteration];	
-	char fileName[100];
-	strcat(fileName,ctime(&curtime));
-	strcat(fileName,".csv");
+	double adapt_array_2[iteration];
 
 	int i = 0;
+	
 	while ( i < iteration)
 		{
 			adapt_array_1[i] = big_array_1[i];
 			adapt_array_2[i] = big_array_2[i];
 			i++;
 		}
-		gnuplot_write_xy_csv(fileName, adapt_array_1, adapt_array_2, iteration,"Temperature over time" );
+	
+	gnuplot_write_xy_csv(fileName, adapt_array_1, adapt_array_2, iteration,"Temperature over time" );
 } 
