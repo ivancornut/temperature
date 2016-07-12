@@ -1,2 +1,4 @@
-Code to read a 1-wire temperature sensor on the pi and write it to a csv file
+Code to read a 1-wire temperature sensor on the raspberry_pi and write to a csv file that incorporates time. 
+
+The gnuplot_i library used to make the csv file gnuplot compatible was written by Ndevilla and can be found on his website here : http://ndevilla.free.fr/gnuplot/index.html
 
