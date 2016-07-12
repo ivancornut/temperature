@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	char *buffer; 
 	buffer = ctime(&stamp_time);
 	RemoveSpaces(buffer);
-	strcat(fileName,"temp_")
+	strcat(fileName,"temp_");
 	strcat(fileName,buffer);
 	strcat(fileName,".csv");
 
