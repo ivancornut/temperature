@@ -4,7 +4,9 @@
 #include <unistd.h>
 #include "gnuplot_i.h"
 #include <time.h>
+// function to create csv readable by gnuplot using gnuplot_i library
 void create_csv(double *big_array_1, double *big_array_2, int iteration, char * fileName);
+
 int main(int argc, char *argv[])
 {
 // file to read temperature
