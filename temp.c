@@ -4,17 +4,23 @@
 #include "gnuplot_i.h"
 #include <time.h>
 void create_csv(double *big_array, int iteration);
-int main()
+int main(int argc, char *argv[])
 {
 // file to read temperature
 	FILE *fp ;
 // file to write current temperature for html page
 	FILE *fp2 ;
+	
+	time_t curtime;
+	time(&curtime);	
+	char fileName[100];
+	strcat(fileName,ctime(&curtime));
+	strcat(fileName,".csv");
+
+	
+	int iterations = atoi(argv[1]);
+	int sleep_time = atoi(argv[2]);
 	char str1[100], str2[100], str3[100];
-//	char str3[100]= "01.00";
-//	printf("%s\n",str3);
-	printf("%f \n", strtod(str3,NULL));
-	int iterations = 2000;	
 	double *storage = (double*) malloc(iterations * sizeof(double));
 	memset(storage, 0, iterations * sizeof(double));
 	int i = 0;
@@ -49,13 +55,13 @@ int main()
 		fclose(fp) ;
 		fclose(fp2) ;
 // wait 300 seconds for next iteration 
-		sleep(300);		
+		sleep(sleep_time);		
 		i++;
 	}
 	return 0 ;
 }
 
-void create_csv(double *big_array_1, double *big_array_2, int iteration, int timestamp)
+void create_csv(double *big_array_1, double *big_array_2, int iteration, char * fileName)
 {
 	time_t curtime;
 	time(&curtime);	
