@@ -12,10 +12,15 @@ int main(int argc, char *argv[])
 // file to write current temperature for html page
 	FILE *write_file ;
 	
-	time_t curtime;
-	time(&curtime);	
+	double nb_of_seconds;
+	time_t begin_time;
+	time_t current_time;
+	begin_time = time(NULL);
+
+	time_t stamp_time;
+	time(&stamp_time);	
 	char fileName[100];
-	strcat(fileName,ctime(&curtime));
+	strcat(fileName,ctime(&stamp_time));
 	strcat(fileName,".csv");
 
 	int iterations = atoi(argv[1]);
@@ -57,6 +62,11 @@ int main(int argc, char *argv[])
 			printf("Current temperature is : %s °C \n", str3);
 			fprintf(write_file, "Current temperature is : %s \\°C \n", str3);
 			temperature_storage[i] = strtod(str3, NULL);
+			
+			current_time = time(NULL);
+			nb_of_seconds = (double) (current_time - begin_time);
+			time_storage[i] = nb_of_seconds / 60; 
+			
 			create_csv(time_storage, temperature_storage, i, fileName);
 		}
 
