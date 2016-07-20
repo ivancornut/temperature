@@ -25,13 +25,14 @@ int main(int argc, char *argv[])
 // creating the filename using stamping with date and time
 	time_t stamp_time;
 	time(&stamp_time);	
-	char fileName[100];
+	char fileName[200];
 	char *buffer; 
 	buffer = ctime(&stamp_time);
 // used to remove spaces outputted by ctime method
 	RemoveSpaces(buffer);
-	strcat(fileName,"temp_");
+	strcat(fileName,"/home/pi/csv_files/");
 	strcat(fileName,buffer);
+	strcat(fileName,"_temp");
 	strcat(fileName,".csv");
 
 // reading arguments and converting them into integers
